@@ -7,6 +7,7 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution {
+        // code hereclass Solution {
   public:
     int countFreq(vector<int>& arr, int target) {
         int low = 0, high = arr.size() - 1;
