@@ -4,60 +4,80 @@ using namespace std;
 
 
 // } Driver Code Ends
+
+struct meeting{
+    int st;
+    int en;
+    int pos;
+};
+
 class Solution {
   public:
-    class Meeting {
-    public:
-        int start;
-        int end;
-        int pos;
-
-        Meeting(int start, int end, int pos) : start(start), end(end), pos(pos) {}
-    };
-    static bool meetingComparator(Meeting m1, Meeting m2) {
-        return (m1.end < m2.end);
-    }
-
-    
-    int maxMeetings(int n, int start[], int end[]) {
-        vector<Meeting> meet;
-        for (int i = 0; i < n; i++) {
-            meet.push_back(Meeting(start[i], end[i], i + 1));
+    bool static comparator(struct meeting m1, struct meeting m2){
+        if(m1.en < m2.en){
+            return true;
         }
-
-        sort(meet.begin(), meet.end(), meetingComparator);
-
-        int count = 1;
-        int limit = meet[0].end;
-
-        for (int i = 1; i < n; i++) {
-            if (meet[i].start > limit) {
-                limit = meet[i].end;
-                count++;
+        else if(m1.en > m2.en) return false;
+        else if(m1.pos < m2.pos) return true;
+        return false;
+    }
+    int maxMeetings(vector<int>& start, vector<int>& end) {
+        int n = start.size();
+        struct meeting meet[n];
+        
+        for(int i =0; i < n; i++){
+            meet[i].st = start[i];
+            meet[i].en = end[i];
+            meet[i].pos = i+1;
+        }
+        
+        sort(meet, meet+n, comparator);
+        
+        vector<int> answer;
+        int limit = meet[0].en;
+        answer.push_back(meet[0].pos);
+        
+        for(int i =1; i < n; i++){
+            if(meet[i].st > limit){
+                limit = meet[i].en;
+                answer.push_back(meet[i].pos);
             }
         }
-
-        return count;
+        
+        return answer.size();
     }
 };
 
+
 //{ Driver Code Starts.
+
 int main() {
+
     int t;
     cin >> t;
+    cin.ignore();
     while (t--) {
-        int n;
-        cin >> n;
-        int start[n], end[n];
-        for (int i = 0; i < n; i++)
-            cin >> start[i];
+        string input;
+        int num;
+        vector<int> start;
 
-        for (int i = 0; i < n; i++)
-            cin >> end[i];
+        getline(cin, input);
+        stringstream s2(input);
+        while (s2 >> num) {
+            start.push_back(num);
+        }
+
+        vector<int> end;
+        getline(cin, input);
+        stringstream s22(input);
+        while (s22 >> num) {
+            end.push_back(num);
+        }
 
         Solution ob;
-        int ans = ob.maxMeetings(n, start, end);
+        int ans = ob.maxMeetings(start, end);
         cout << ans << endl;
+        cout << "~" << endl;
     }
     return 0;
 }
